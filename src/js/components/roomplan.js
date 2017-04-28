@@ -1,37 +1,56 @@
 import Moment from 'moment';
 import { extendMoment } from 'moment-range';
-import humanizeDuration from 'humanize-duration';
-
+import { setAttributes } from '../utils';
+import Activity from './activity';
 
 export default class Roomplan {
   constructor() {
-    this.moment = extendMoment(Moment);
-
+    window.moment = extendMoment(Moment);
     this.load();
+    this.scene = document.querySelector('#a-scene');
+    this.activities = [];
+    this.createDoor();
+  }
+
+  init() {
+    const room358 = this.getRoomActivities('U SE 358');
+
+    // get activities and create text node
+    room358.map((a, index) => {
+      const activity = new Activity(a.__row);
+      this.activities.push(activity);
+      const entity = document.createElement('a-text');
+      setAttributes(entity, {
+        value: activity.duration,
+        position: `0.5 0.5 ${index * 0.3}`,
+        rotation: '-90 0 0',
+        color: '#f60',
+      });
+      this.scene.appendChild(entity);
+    });
+  }
+
+  createDoor() {
+    const entity = document.createElement('a-plane');
+    setAttributes(entity, {
+      rotation: '-90 0 0',
+      position: '-2 -2 0',
+      height: '3',
+      width: '1',
+      color: '#f60',
+      opacity: '0.5',
+    });
+    this.scene.appendChild(entity);
   }
 
   async load() {
-    const response = await fetch('http://localhost/roomplan.php');
+    const response = await fetch('https://localhost/roomplan.php');
     this.plan = await response.json();
 
     this.init();
   }
 
-  init() {
-    this.getRoomActivities('U SE 358').map((activity) => {
-      console.log(activity.__row.activityName, activity.__row.activityBegin, activity.__row.activityEnd, activity.__row.lecturerName);
-
-      const start = this.moment(activity.__row.activityBegin);
-      const end   = this.moment(activity.__row.activityEnd);
-      const range = this.moment.range(start, end);
-      const duration = range + 0;
-      console.log(humanizeDuration(duration));
-    });
-  }
-
   getRoomActivities(room) {
-    return this.plan.activities.filter((activity) => {
-      return activity.__row.roomName === room;
-    });
+    return this.plan.activities.filter(activity => activity.__row.roomName === room);
   }
-};
+}

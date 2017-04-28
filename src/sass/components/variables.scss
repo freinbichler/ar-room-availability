@@ -8,7 +8,7 @@ $grid-breakpoints: (
 
 // sass-mq
 $mq-breakpoints: $grid-breakpoints;
-$mq-show-breakpoints: (xs, sm, md, lg, xl);
+$mq-show-breakpoints: ();
 @if($production == true) {
   $mq-show-breakpoints: ();
 }
