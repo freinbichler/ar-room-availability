@@ -1,0 +1,14 @@
+$grid-breakpoints: (
+  xs: 0px,
+  sm: 576px,
+  md: 768px,
+  lg: 992px,
+  xl: 1200px
+);
+
+// sass-mq
+$mq-breakpoints: $grid-breakpoints;
+$mq-show-breakpoints: (xs, sm, md, lg, xl);
+@if($production == true) {
+  $mq-show-breakpoints: ();
+}
