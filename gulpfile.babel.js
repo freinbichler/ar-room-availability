@@ -65,6 +65,10 @@ gulp.task('scripts', () => {
     .pipe(gulp.dest('./public/js'));
 });
 
+gulp.task('vendor', () => {
+  return gulp.src('src/js/vendor/*').pipe(gulp.dest('public/js/vendor'));
+});
+
 gulp.task('static', () => {
   return gulp.src('src/**/*.{html,php,jpg,jpeg,png,gif,svg,ico,eot,ttf,woff,woff2}').pipe(gulp.dest('public'));
 });
@@ -84,7 +88,7 @@ gulp.task('templates', () => {
 });
 
 // Browser-Sync
-gulp.task('serve', ['styles', 'scripts', 'templates', 'static'], () => {
+gulp.task('serve', ['styles', 'scripts', 'templates', 'static', 'vendor'], () => {
   browserSync({
     notify: false,
     server: ['.tmp', 'public']
@@ -93,6 +97,7 @@ gulp.task('serve', ['styles', 'scripts', 'templates', 'static'], () => {
   gulp.watch(['src/sass/**/*.{scss,css}'], ['styles']);
   gulp.watch(['src/js/**/*.{js,es6}'], ['scripts', browserSync.reload]);
   gulp.watch(['src/**/*.hbs'], ['templates', browserSync.reload]);
+  gulp.watch(['src/js/vendor/*'], ['vendor', browserSync.reload]);
   gulp.watch(['src/**/*.{html,php,jpg,jpeg,png,gif,svg,ico,eot,ttf,woff,woff2}'], ['static', browserSync.reload]).on('change', (event) => {
     if(event.type === 'deleted') {
       let filePathFromSrc = path.relative(path.resolve('src'), event.path);
