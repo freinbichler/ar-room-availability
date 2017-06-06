@@ -1,6 +1,12 @@
 {
     "extends": "airbnb-base",
     "plugins": [
-        "import"
-    ]
+      "import"
+    ],
+    "env": {
+      "browser": true
+    },
+    "rules": {
+      "no-underscore-dangle": "off"
+    }
 }
