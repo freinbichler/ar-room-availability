@@ -1044,7 +1044,9 @@ THREEx.ArToolkitSource.prototype._initSourceWebcam = function(onReady) {
 	var domElement = document.createElement('video');
 	domElement.style.width = this.parameters.displayWidth+'px'
 	domElement.style.height = this.parameters.displayHeight+'px'
-
+	domElement.setAttribute('autoplay', '');
+	domElement.setAttribute('muted', '');
+	domElement.setAttribute('playsinline', '');
 
 	if (navigator.getUserMedia === undefined ){
 		alert("WebRTC issue! navigator.getUserMedia not present in your browser");		
@@ -1058,66 +1060,13 @@ THREEx.ArToolkitSource.prototype._initSourceWebcam = function(onReady) {
                 var constraints = {
 			audio: false,
 			video: {
-				mandatory: {
-					maxWidth: _this.parameters.sourceWidth,
-					maxHeight: _this.parameters.sourceHeight
-		    		}
+				facingMode: 'environment'
 		  	}
                 }
 
-		// TODO super unclear how to get the backward facing camera...
-		// use heuristic - on chrome android current algo is working
-		// 
-		// on macosx it isnt. figure out the algo, and do if(macosx)
-		// - with one or two camera
-		// 
-		// some issue on window
-		
-		/**
-		 * how to test
-		 * - one or two camera on macbook
-		 * - my phone
-		 */
-		var runOnMobile = 'ontouchstart' in window ? true : false
-		// debugger
-		if( runOnMobile === true ){
-			pickDeviceAndroid(devices)
-		}else{
-			pickDeviceMacosx(devices)
-		}
-		
-
-		function pickDeviceAndroid(devices){
-			var videoDevices = devices.filter(function(device){
-				return device.kind === 'videoinput'
-			})
-			if( videoDevices.length !== 0 ){
-				var pickedDevice = videoDevices[videoDevices.length-1]
-				constraints.video.optional = [{sourceId: pickedDevice.deviceId}]
-			}
-		}
-		function pickDeviceMacosx(devices){
-			// debugger
-			devices.forEach(function(device) {
-				if( device.kind !== 'videoinput' )	return
-
-				if( constraints.video.optional !== undefined )	return
-				constraints.video.optional = [{sourceId: device.deviceId}]
-			});			
-		}
-
-		// OLD API
-                // it it finds the videoSource 'environment', modify constraints.video
-                // for (var i = 0; i != sourceInfos.length; ++i) {
-                //         var sourceInfo = sourceInfos[i];
-                //         if(sourceInfo.kind == "video" && sourceInfo.facing == "environment") {
-                //                 constraints.video.optional = [{sourceId: sourceInfo.id}]
-                //         }
-                // }
-
-		navigator.getUserMedia(constraints, function success(stream) {
+		navigator.mediaDevices.getUserMedia(constraints).then(function success(stream) {
 			// console.log('success', stream);
-			domElement.src = window.URL.createObjectURL(stream);
+			domElement.srcObject = stream;
 			// to start the video, when it is possible to start it only on userevent. like in android
 			document.body.addEventListener('click', function(){
 				domElement.play();
@@ -1130,7 +1079,7 @@ THREEx.ArToolkitSource.prototype._initSourceWebcam = function(onReady) {
 				onReady()
 				clearInterval(interval)
 			}, 1000/50);
-		}, function(error) {
+		}).catch(function(error) {
 			console.log("Can't access user media", error);
 			alert("Can't access user media :()");
 		});
