@@ -8,6 +8,7 @@ export default class Roomplan {
     window.moment = extendMoment(Moment);
     this.load();
     this.scene = document.querySelector('#a-scene');
+    this.room1 = this.scene.querySelector('#room-1');
     this.activities = [];
     this.createDoor();
   }
@@ -26,7 +27,7 @@ export default class Roomplan {
         rotation: '-90 0 0',
         color: '#f60',
       });
-      this.scene.appendChild(entity);
+      this.room1.appendChild(entity);
     });
   }
 
@@ -44,7 +45,7 @@ export default class Roomplan {
   }
 
   async load() {
-    const response = await fetch('https://localhost/roomplan.php');
+    const response = await fetch('http://localhost/roomplan.php');
     this.plan = await response.json();
 
     this.init();
