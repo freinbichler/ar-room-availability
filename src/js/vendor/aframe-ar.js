@@ -1339,13 +1339,13 @@ AFRAME.registerSystem('artoolkit', {
 			onResize()
 
 			// kludge to write a 'resize' event
-			var startedAt = Date.now()
-			function tick(){
-				if( Date.now() - startedAt > 10*1000 )	return
-				window.dispatchEvent(new Event('resize'));
-				setTimeout(tick, 1000/60)
-			}
-			setTimeout(tick, 1000/60)
+			// var startedAt = Date.now()
+			// function tick(){
+			// 	if( Date.now() - startedAt > 10*1000 )	return
+			// 	window.dispatchEvent(new Event('resize'));
+			// 	setTimeout(tick, 1000/60)
+			// }
+			// setTimeout(tick, 1000/60)
 		})
 
 		// handle resize
