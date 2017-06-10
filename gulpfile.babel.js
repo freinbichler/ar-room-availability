@@ -91,7 +91,8 @@ gulp.task('templates', () => {
 gulp.task('serve', ['styles', 'scripts', 'templates', 'static', 'vendor'], () => {
   browserSync({
     notify: false,
-    server: ['.tmp', 'public']
+    server: ['.tmp', 'public'],
+    https: true,
   });
 
   gulp.watch(['src/sass/**/*.{scss,css}'], ['styles']);
