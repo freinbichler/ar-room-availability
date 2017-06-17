@@ -6,52 +6,74 @@ import Activity from './activity';
 export default class Roomplan {
   constructor() {
     window.moment = extendMoment(Moment);
-    this.load();
     this.scene = document.querySelector('#a-scene');
-    this.room1 = this.scene.querySelector('#room-1');
-    this.activities = [];
-    this.createDoor();
+
+    this.load().then((m) => {
+      this.markerActivities = m;
+      this.init();
+    });
   }
 
   init() {
-    const room358 = this.getRoomActivities('U SE 358');
+    const markers = this.markerActivities;
+    console.log(markers);
+    for (const property in markers) {
+      if (markers.hasOwnProperty(property)) {
+        const marker = this.createMarker(property);
 
-    // get activities and create text node
-    room358.map((a, index) => {
-      const activity = new Activity(a.__row);
-      this.activities.push(activity);
-      const entity = document.createElement('a-text');
-      setAttributes(entity, {
-        value: activity.duration,
-        position: `0.5 0.5 ${index * 0.3}`,
-        rotation: '-90 0 0',
-        color: '#f60',
-      });
-      this.room1.appendChild(entity);
+        const text = this.createText();
+        const frame = this.createFrame();
+        for (const box of frame) {
+          marker.appendChild(box);
+        }
+        marker.appendChild(text);
+        this.scene.appendChild(marker);
+      }
+    }
+
+  createMarker(value) {
+    const marker = document.createElement('a-marker');
+    setAttributes(marker, {
+      type: 'barcode',
+      value,
     });
+    return marker;
   }
 
-  createDoor() {
-    const entity = document.createElement('a-plane');
-    setAttributes(entity, {
+  createText() {
+    const text = document.createElement('a-text');
+    setAttributes(text, {
+      value: 'test',
+      position: '-1 0 -1',
       rotation: '-90 0 0',
-      position: '-2 -2 0',
-      height: '3',
-      width: '1',
       color: '#f60',
-      opacity: '0.5',
     });
-    this.scene.appendChild(entity);
+    return text;
+  }
+
+  createFrame() {
+    const boxes = [];
+    boxes.push(this.createBox({ position: '-0.5 0 0', depth: '1.2', width: '0.1', height: '0.1', color: '#7BC8A4' }));
+    boxes.push(this.createBox({ position: '0.5 0 0', depth: '1.2', width: '0.1', height: '0.1', color: '#7BC8A4' }));
+    boxes.push(this.createBox({ position: '0 0 0.5', depth: '0.1', width: '1.2', height: '0.1', color: '#7BC8A4' }));
+    boxes.push(this.createBox({ position: '0 0 -0.5', depth: '0.1', width: '1.2', height: '0.1', color: '#7BC8A4' }));
+    return boxes;
+  }
+
+  createBox({ position, depth, width, height, color }) {
+    const box = document.createElement('a-box');
+    setAttributes(box, {
+      position,
+      depth,
+      width,
+      height,
+      color,
+    });
+    return box;
   }
 
   async load() {
-    const response = await fetch('http://localhost/roomplan.php');
-    this.plan = await response.json();
-
-    this.init();
-  }
-
-  getRoomActivities(room) {
-    return this.plan.activities.filter(activity => activity.__row.roomName === room);
+    const response = await fetch('https://freinbichler.me/apps/ar-room-backend/');
+    return await response.json();
   }
 }
