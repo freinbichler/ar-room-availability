@@ -44,19 +44,30 @@ export function calculateAvailability(roomActivities) {
   let free = true;
 
   roomActivities.map((activity, i) => {
-    if (now.isBetween(activity.begin, activity.end)) {
-      free = false;
-    } else if (i < roomActivities.length - 1) {
-      const nextActivity = roomActivities[i + 1];
-      const range = window.moment.range(
+    if (free) {
+    // check if now is withing an activity
+      if (now.isBetween(activity.begin, activity.end)) {
+        free = false;
+      } else if (i < roomActivities.length - 1) {
+      // get the next activity and range to current activity
+        const nextActivity = roomActivities[i + 1];
+        const range = window.moment.range(
         window.moment(activity.end),
         window.moment(nextActivity.begin),
       );
-      if (now.isBetween(activity.end, nextActivity.begin) && range.diff('minutes') <= 15) {
-        free = false;
+
+      // check if there is a break
+        if (now.isBetween(activity.end, nextActivity.begin) && range.diff('minutes') <= 15) {
+          free = false;
+        }
       }
     }
   });
 
   return free;
+}
+
+export async function loadJSON(url) {
+  const response = await fetch(url);
+  return response.json();
 }
