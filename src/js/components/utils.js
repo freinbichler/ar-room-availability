@@ -14,9 +14,10 @@ export function createMarker(value) {
   return marker;
 }
 
-export function createText({ text, color = '#000', position = '-2 0 -3', size = 4, align = 'center' }) {
+export function createText({ text, color = '#000', position = '-2 0 -3', size = 4, align = 'center', id }) {
   const textObject = document.createElement('a-text');
   setAttributes(textObject, {
+    id,
     value: text,
     width: size,
     font: 'aileronsemibold',
@@ -29,9 +30,9 @@ export function createText({ text, color = '#000', position = '-2 0 -3', size = 
   return textObject;
 }
 
-export function createBox({ position, depth, width, height, color }) {
+export function createBox({ position, depth, width, height, color, id }) {
   const box = document.createElement('a-box');
-  setAttributes(box, { position, depth, width, height, color });
+  setAttributes(box, { position, depth, width, height, color, id });
   return box;
 }
 
@@ -44,10 +45,10 @@ export function createBadge({ position, src }) {
 export function createFrame(isFree) {
   const boxes = [];
   const color = isFree ? '#30E8BF' : '#c0392b';
-  boxes.push(createBox({ position: '-0.8 0 -1.05', depth: '4', width: '0.3', height: '0.3111', color }));
-  boxes.push(createBox({ position: '1.05 0 1.4', depth: '1.5', width: '4', height: '0.3112', color }));
-  boxes.push(createBox({ position: '2.9 0 -1.05', depth: '4', width: '0.3', height: '0.3111', color }));
-  boxes.push(createBox({ position: '1.05 0 -2.9', depth: '0.3', width: '4', height: '0.3112', color }));
+  boxes.push(createBox({ position: '-0.8 0 -1.05', depth: '4', width: '0.3', height: '0.3111', color, id: 'frame' }));
+  boxes.push(createBox({ position: '1.05 0 1.4', depth: '1.5', width: '4', height: '0.3112', color, id: 'frame' }));
+  boxes.push(createBox({ position: '2.9 0 -1.05', depth: '4', width: '0.3', height: '0.3111', color, id: 'frame' }));
+  boxes.push(createBox({ position: '1.05 0 -2.9', depth: '0.3', width: '4', height: '0.3112', color, id: 'frame' }));
   return boxes;
 }
 

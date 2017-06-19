@@ -67,8 +67,8 @@ export default class Roomplan {
   getTextObjects({ free, duration, marker }) {
     const titleText = free ? 'FREE' : 'OCCUPIED';
     const durationText = duration.humanizedDuration;
-    const titleEl = createText({ position: '1 0.25 1.3', text: titleText, color: '#fff' });
-    const durationEl = createText({ position: '1 0.25 1.7', text: durationText, color: '#fff', size: 3 });
+    const titleEl = createText({ position: '1 0.25 1.3', text: titleText, color: '#fff', id: 'title' });
+    const durationEl = createText({ position: '1 0.25 1.7', text: durationText, color: '#fff', size: 3, id: 'duration' });
     const roomEl = createText({ position: '0 0.15 0', text: this.markerData[marker].room, color: '#000', size: 2 });
     return [titleEl, durationEl, roomEl];
   }
@@ -99,20 +99,24 @@ export default class Roomplan {
   refresh() {
     this.timer = setInterval(() => {
       this.markers.map((marker) => { // eslint-disable-line
-        const text = marker.querySelectorAll('a-text');
-        const boxes = marker.querySelectorAll('a-box');
+        const titleEl = marker.querySelector('#title');
+        const durationEl = marker.querySelector('#duration');
+        const boxes = marker.querySelectorAll('#frame');
         const key = marker.getAttribute('value');
         const { free, duration } = calculateAvailability(this.markerData[key].activities);
         const color = free ? '#30E8BF' : '#c0392b';
         const newObjs = this.getTextObjects({ free, duration, marker: key });
-        [...text].map((textObj, i) => { // eslint-disable-line
-          textObj.setAttribute('value', newObjs[i].getAttribute('value'));
-        });
+
+        // refresh title & duration value
+        titleEl.setAttribute('value', newObjs[0].getAttribute('value'));
+        durationEl.setAttribute('value', newObjs[1].getAttribute('value'));
+
+        // change frame color
         [...boxes].map((box) => { // eslint-disable-line
           box.setAttribute('color', color);
         });
       });
-    }, 30000);
+    }, 5000);
   }
 
 }
