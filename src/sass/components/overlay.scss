@@ -26,6 +26,7 @@
   &.overlay-loading {
     background: #1D9EE0;
     z-index: 102;
+    transition: opacity .5s, visibility .5s;
 
     .spinner {
       display: inline-block;
@@ -36,10 +37,8 @@
       border-top-color: #fff;
       animation: spin 1s ease-in-out infinite;
       opacity: 1;
-      transition: opacity .3s;
-
     }
-    
+
     &.hidden {
       opacity: 0;
       visibility: hidden;
