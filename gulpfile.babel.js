@@ -31,7 +31,7 @@ gulp.task('styles', () => gulp.src([
     .pipe($.changed('.tmp/styles', { extension: '.css' }))
     .pipe($.if(!argv.production, $.sourcemaps.init()))
     .pipe($.sassVariables({
-      $production: (argv.production == true),
+      $production: (argv.production === true),
     }))
     .pipe($.sass({
       precision: 10,
@@ -55,15 +55,15 @@ gulp.task('scripts', () => browserify({
       .on('error', handleError)
     .pipe(source('app.js'))
     .pipe(buffer())
-    .pipe($.if(!argv.production, $.sourcemaps.init({ loadMaps: true })))
-    .pipe($.if(argv.production, $.uglify()))
-      .on('error', handleError)
-    .pipe($.if(!argv.production, $.sourcemaps.write()))
+    // .pipe($.if(!argv.production, $.sourcemaps.init({ loadMaps: true })))
+    // .pipe($.if(argv.production, $.uglify()))
+      // .on('error', handleError)
+    // .pipe($.if(!argv.production, $.sourcemaps.write()))
     .pipe(gulp.dest('./public/js')));
 
 gulp.task('vendor', () => gulp.src('src/js/vendor/*').pipe(gulp.dest('public/js/vendor')));
 
-gulp.task('static', () => gulp.src('src/**/*.{html,php,jpg,jpeg,png,gif,svg,ico,eot,ttf,woff,woff2,obj}').pipe(gulp.dest('public')));
+gulp.task('static', () => gulp.src('src/**/*.{html,php,jpg,jpeg,png,gif,svg,ico,eot,ttf,woff,woff2,obj,json}').pipe(gulp.dest('public')));
 
 gulp.task('templates', () => gulp.src([
   'src/**/*.hbs',
@@ -89,7 +89,7 @@ gulp.task('serve', ['styles', 'scripts', 'templates', 'static', 'vendor'], () =>
   gulp.watch(['src/js/**/*.{js,es6}'], ['scripts', browserSync.reload]);
   gulp.watch(['src/**/*.hbs'], ['templates', browserSync.reload]);
   gulp.watch(['src/js/vendor/*'], ['vendor', browserSync.reload]);
-  gulp.watch(['src/**/*.{html,php,jpg,jpeg,png,gif,svg,ico,eot,ttf,woff,woff2,obj}'], ['static', browserSync.reload]).on('change', (event) => {
+  gulp.watch(['src/**/*.{html,php,jpg,jpeg,png,gif,svg,ico,eot,ttf,woff,woff2,obj,json}'], ['static', browserSync.reload]).on('change', (event) => {
     if (event.type === 'deleted') {
       const filePathFromSrc = path.relative(path.resolve('src'), event.path);
       const destFilePath = path.resolve('public', filePathFromSrc);
