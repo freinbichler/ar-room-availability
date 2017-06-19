@@ -67,8 +67,8 @@ export default class Roomplan {
   getTextObjects({ free, duration, marker }) {
     const titleText = free ? 'FREE' : 'OCCUPIED';
     const durationText = duration.humanizedDuration;
-    const titleEl = createText({ position: '1 0.25 1.3', text: titleText, color: '#fff', id: 'title' });
-    const durationEl = createText({ position: '1 0.25 1.7', text: durationText, color: '#fff', size: 3, id: 'duration' });
+    const titleEl = createText({ position: '1 0.25 1.2', text: titleText, color: '#fff', id: 'title' });
+    const durationEl = createText({ position: '1 0.25 1.6', text: durationText, color: '#fff', size: 3, id: 'duration' });
     const roomEl = createText({ position: '0 0.15 0', text: this.markerData[marker].room, color: '#000', size: 2 });
     return [titleEl, durationEl, roomEl];
   }
