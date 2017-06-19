@@ -38,10 +38,11 @@
       opacity: 1;
       transition: opacity .3s;
 
-      &.hidden {
-        opacity: 0;
-        visibility: hidden;
-      }
+    }
+    
+    &.hidden {
+      opacity: 0;
+      visibility: hidden;
     }
   }
 }

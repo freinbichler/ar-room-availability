@@ -16,7 +16,8 @@ export default class Roomplan {
     // load the marker from the server
     const response = loadJSON('https://freinbichler.me/apps/ar-room-backend/');
     response.then((m) => {
-      document.querySelector('.overlay-loading').classList.add('hidden');
+      const loadingScreen = document.querySelector('.overlay-loading');
+      loadingScreen.classList.add('hidden');
       this.markerData = m;
       this.init();
     });
