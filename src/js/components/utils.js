@@ -105,16 +105,12 @@ export function calculateAvailabilityDuration(free, roomActivities, index) {
   return { duration, humanizedDuration };
 }
 
-export function calculateAvailability(roomActivitiess) {
+export function calculateAvailability(roomActivities) {
   const now = window.moment();
+  // const now = window.moment('2017-06-19 08:30:00');
   let free = true;
   let index = -1;
-  const roomActivities = [
-    { begin: '2017-06-19 23:30:00', end: '2017-06-19 23:55:00', name: 'Pflegekonzepte für die Berufspraxis UB/13/01 Gr.b', lecturer: 'Peter FLEISSNER', room: 'U LB 374', faculty: 'MMA-M' },
-    { begin: '2017-06-19 22:15:00', end: '2017-06-19 22:45:00', name: 'Pflegekonzepte für die Berufspraxis UB/13/02 Gr.b', lecturer: 'Peter FLEISSNER', room: 'U LB 374', faculty: 'MMA-M' },
-    { begin: '2017-06-19 21:40:00', end: '2017-06-19 21:55:00', name: 'Game Development 2/08.1', lecturer: 'Markus TATZGERN', room: 'U LB 374', faculty: 'MMT-B' },
-  ];
-  roomActivities.map((activity, i) => {
+  roomActivities.map((activity, i) => { // eslint-disable-line
     if (free) {
       // check if now is withing an activity
       if (now.isBetween(activity.begin, activity.end)) {

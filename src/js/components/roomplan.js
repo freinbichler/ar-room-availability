@@ -1,4 +1,3 @@
-import { setAttributes } from '../utils';
 import {
   createMarker,
   createText,
@@ -43,14 +42,15 @@ export default class Roomplan {
       textObjects.map(obj => (marker.appendChild(obj)));
 
       // if there are marker activites
-      markers[key].activities.map((activity) => {
+      markers[key].activities.map((activity) => { // eslint-disable-line
         const now = window.moment();
+        // const now = window.moment('2017-06-19 08:30:00');
         const toShow = !!(now.isBetween(activity.begin, activity.end) || now.isBefore(activity.begin));
         // if activity is currently taking place or later in the day
         if (toShow) {
           const activityObj = this.getActivityObject({ activity, y: counter });
           activityObj.map(a => (marker.appendChild(a)));
-          counter += 1.5;
+          counter += 1.4;
         }
       });
 
@@ -66,14 +66,13 @@ export default class Roomplan {
   getTextObjects({ free, duration, marker }) {
     const titleText = free ? 'FREE' : 'OCCUPIED';
     const durationText = duration.humanizedDuration;
-    const color = free ? '#30E8BF' : '#c0392b';
     const titleEl = createText({ position: '1 0.25 1.3', text: titleText, color: '#fff' });
     const durationEl = createText({ position: '1 0.25 1.7', text: durationText, color: '#fff', size: 3 });
     const roomEl = createText({ position: '0 0.15 0', text: this.markerData[marker].room, color: '#000', size: 2 });
     return [titleEl, durationEl, roomEl];
   }
 
-  getActivityObject({ activity, y }) {
+  getActivityObject({ activity, y }) { // eslint-disable-line
     let badgeEl;
     const timeStart = window.moment(activity.begin).format('HH:mm');
     const timeEnd = window.moment(activity.end).format('HH:mm');
@@ -81,9 +80,9 @@ export default class Roomplan {
 
     // create  a frame elements
     const bg = createBox({ position: `-3 0 ${y}`, depth: '1.2', width: '3', height: '0.1', color: '#fff' });
-    const titleEl = createText({ position: `-3.5 0.25 ${y - 0.3}`, text: activity.name, color: '#000', align: 'left', size: 1.5 });
-    const lecturerEl = createText({ position: `-3.5 0.25 ${y}`, text: activity.lecturer, color: '#000', align: 'left', size: 1.5 });
-    const timeEl = createText({ position: `-3.5 0.25 ${y + 0.3}`, text: `${timeStart} - ${timeEnd}`, color: '#000', size: 1.5, align: 'left' });
+    const titleEl = createText({ position: `-3.4 0.25 ${y - 0.3}`, text: activity.name, color: '#000', align: 'left', size: 1.5 });
+    const lecturerEl = createText({ position: `-3.4 0.25 ${y}`, text: activity.lecturer, color: '#000', align: 'left', size: 1.5 });
+    const timeEl = createText({ position: `-3.4 0.25 ${y + 0.3}`, text: `${timeStart} - ${timeEnd}`, color: '#000', size: 1.5, align: 'left' });
     if (faculty.indexOf('MMA') !== -1 || faculty.indexOf('MMT') !== -1) {
       badgeEl = createBadge({ position: `-3.9 0.25 ${y}`, src: `#${faculty.toLowerCase()}` });
     } else {
@@ -98,18 +97,17 @@ export default class Roomplan {
 
   refresh() {
     this.timer = setInterval(() => {
-      this.markers.map((marker) => {
+      this.markers.map((marker) => { // eslint-disable-line
         const text = marker.querySelectorAll('a-text');
         const boxes = marker.querySelectorAll('a-box');
         const key = marker.getAttribute('value');
         const { free, duration } = calculateAvailability(this.markerData[key].activities);
         const color = free ? '#30E8BF' : '#c0392b';
         const newObjs = this.getTextObjects({ free, duration, marker: key });
-        [...text].map((textObj, i) => {
+        [...text].map((textObj, i) => { // eslint-disable-line
           textObj.setAttribute('value', newObjs[i].getAttribute('value'));
-          textObj.setAttribute('color', color);
         });
-        [...boxes].map((box) => {
+        [...boxes].map((box) => { // eslint-disable-line
           box.setAttribute('color', color);
         });
       });
