@@ -1,9 +1,14 @@
 import Moment from 'moment';
 import { extendMoment } from 'moment-range';
 import humanizeDuration from 'humanize-duration';
-import { setAttributes } from '../utils';
 
 window.moment = extendMoment(Moment);
+
+export function setAttributes(el, attrs) {
+  for(let key in attrs) {
+    el.setAttribute(key, attrs[key]);
+  }
+}
 
 export function createMarker(value) {
   const marker = document.createElement('a-marker');
