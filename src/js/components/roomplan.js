@@ -26,9 +26,9 @@ export default class Roomplan {
     Object.keys(markers).forEach((key) => {
       const marker = createMarker(key);
 
-      const availability = calculateAvailability(markers[key]);
-      const text = createText(availability);
-      const frame = createFrame(availability);
+      const { free, duration } = calculateAvailability(markers[key]);
+      const text = createText({ free, duration });
+      const frame = createFrame(free);
       frame.map(box => (marker.appendChild(box)));
       marker.appendChild(text);
       this.scene.appendChild(marker);
@@ -50,7 +50,7 @@ export default class Roomplan {
         const key = marker.getAttribute('value');
         const availability = calculateAvailability(this.markerActivities[key]);
 
-        text.setAttribute('value', availability);
+        text.setAttribute('value', availability); // TODO: fix this to set text correctly
       });
     // }, 60000);
     }, 2000);
