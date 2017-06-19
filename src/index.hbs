@@ -1,15 +1,6 @@
 {{> header}}
 
 <a-scene id="a-scene" embedded artoolkit="sourceType: webcam; detectionMode: mono_and_matrix; matrixCodeType: 3x3;">
-
-  <a-marker type="barcode" value="12">
-    <a-box position="0 0.5 0" material="opacity: 0.5; side: double;color:yellow;">
-      <a-torus-knot radius="0.27" radius-tubular="0.05">
-        <a-animation attribute="rotation" to="360 0 0" dur="5000" easing="linear" repeat="indefinite"></a-animation>
-      </a-torus-knot>
-    </a-box>
-  </a-marker>
-
   <a-entity camera></a-entity>
 </a-scene>
 

@@ -1,7 +1,9 @@
+import { setAttributes } from '../utils';
 import {
   createMarker,
   createText,
   createFrame,
+  createBox,
   calculateAvailability,
   loadJSON,
 } from './utils';
@@ -27,16 +29,22 @@ export default class Roomplan {
       const marker = createMarker(key);
 
       const { free, duration } = calculateAvailability(markers[key]);
-      const text = createText({ free, duration });
+      const text = createText(this.getText({ free, duration }));
       const frame = createFrame(free);
       frame.map(box => (marker.appendChild(box)));
       marker.appendChild(text);
+
       this.scene.appendChild(marker);
       this.markers.push(marker);
     });
 
     // refresh every minute
     this.refresh();
+  }
+
+  getText({ free, duration }) {
+    const freeText = free ? `free ${duration.humanizedDuration}` : 'not free';
+    return freeText;
   }
 
   stopRefresh() {
@@ -48,9 +56,9 @@ export default class Roomplan {
       this.markers.map((marker) => {
         const text = marker.querySelector('a-text');
         const key = marker.getAttribute('value');
-        const availability = calculateAvailability(this.markerActivities[key]);
+        const { free, duration } = calculateAvailability(this.markerActivities[key]);
 
-        text.setAttribute('value', availability); // TODO: fix this to set text correctly
+        text.setAttribute('value', this.getText({ free, duration })); // TODO: fix this to set text correctly
       });
     // }, 60000);
     }, 2000);
