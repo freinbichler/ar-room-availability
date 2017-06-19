@@ -67,9 +67,9 @@ export default class Roomplan {
   getTextObjects({ free, duration, marker }) {
     const titleText = free ? 'FREE' : 'OCCUPIED';
     const durationText = duration.humanizedDuration;
-    const titleEl = createText({ position: '1 0.25 1.3', text: titleText, color: '#fff', id: 'title' });
+    const titleEl = createText({ position: '1 0.25 1.3', text: titleText, color: '#fff', id: 'title' });
     const durationEl = createText({ position: '1 0.25 1.7', text: durationText, color: '#fff', size: 3, id: 'duration' });
-    const roomEl = createText({ position: '0 0.15 0', text: this.markerData[marker].room, color: '#000', size: 2 });
+    const roomEl = createText({ position: '0 0.15 0', text: this.markerData[marker].room, color: '#000', size: 2 });
     return [titleEl, durationEl, roomEl];
   }
 
@@ -87,7 +87,7 @@ export default class Roomplan {
     if (faculty.indexOf('MMA') !== -1 || faculty.indexOf('MMT') !== -1) {
       badgeEl = createBadge({ position: `-3.9 0.25 ${y}`, src: `#${faculty.toLowerCase()}` });
     } else {
-      badgeEl = createText({ position: `-3.9 0.25 ${y}`, text: faculty, color: '#000', size: 5 });
+      badgeEl = createText({ position: `-3.9 0.25 ${y}`, text: faculty, color: '#000', size: 5 });
     }
     return [titleEl, timeEl, badgeEl, lecturerEl, bg];
   }
