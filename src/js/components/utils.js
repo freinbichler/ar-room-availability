@@ -14,12 +14,15 @@ export function createMarker(value) {
   return marker;
 }
 
-export function createText({ text, color, position }) {
+export function createText({ text, color = '#000', position = '-2 0 -3' }) {
   const textObject = document.createElement('a-text');
   setAttributes(textObject, {
     value: text,
-    position: '-0.5 0 -1',
+    width: 4,
+    font: 'aileronsemibold',
+    'wrap-count': 20,
     rotation: '-90 0 0',
+    position,
     color,
   });
   return textObject;
@@ -33,11 +36,11 @@ export function createBox({ position, depth, width, height, color, opacity }) {
 
 export function createFrame(isFree) {
   const boxes = [];
-  const color = isFree ? 'green' : '#f60';
-  boxes.push(createBox({ position: '-0.8 0 -1.5', depth: '6', width: '0.3', height: '0.3', color }));
-  boxes.push(createBox({ position: '1.5 0 0.8', depth: '0.3', width: '6', height: '0.3', color }));
-  boxes.push(createBox({ position: '4 0 -1.5', depth: '6', width: '0.3', height: '0.3', color }));
-  boxes.push(createBox({ position: '1.5 0 -4', depth: '0.3', width: '6', height: '0.3', color }));
+  const color = isFree ? '#30E8BF' : '#c0392b';
+  boxes.push(createBox({ position: '-0.8 0 -1.05', depth: '4', width: '0.3', height: '0.3', color }));
+  boxes.push(createBox({ position: '1.05 0 0.8', depth: '0.3', width: '4', height: '0.3', color }));
+  boxes.push(createBox({ position: '2.9 0 -1.05', depth: '4', width: '0.3', height: '0.3', color }));
+  boxes.push(createBox({ position: '1.05 0 -2.9', depth: '0.3', width: '4', height: '0.3', color }));
   return boxes;
 }
 
