@@ -55,7 +55,7 @@ export function calculateAvailabilityDuration(free, roomActivities, index) {
     // if room is currently free, calculate time until next activity
     if (roomActivities.length > 0) {
       // time to next activity
-      for (let activity of roomActivities) {
+      for (const activity of roomActivities) {
         if (now.isBefore(activity.begin)) {
           duration = window.moment.range(
             now,
@@ -107,8 +107,8 @@ export function calculateAvailability(roomActivities) {
   let index = -1;
   // const roomActivities = [
   //   { begin: '2017-06-19 15:00:00', end: '2017-06-19 15:30:00' },
-  //   { begin: '2017-06-19 16:00:00', end: '2017-06-19 16:30:00' },
-  //   { begin: '2017-06-19 17:00:00', end: '2017-06-19 17:30:00' },
+  //   { begin: '2017-06-19 16:00:00', end: '2017-06-19 16:50:00' },
+  //   { begin: '2017-06-19 17:05:00', end: '2017-06-19 17:30:00' },
   //   { begin: '2017-06-19 18:00:00', end: '2017-06-19 18:30:00' },
   // ];
   roomActivities.map((activity, i) => {

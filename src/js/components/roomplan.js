@@ -33,7 +33,7 @@ export default class Roomplan {
       const textForObject = this.getText({ free, duration });
 
       // a frame objects
-      const text = createText(Object.assign({ position: '-3 0 -2.5' }, textForObject));
+      const text = createText(Object.assign({ position: '-4 0 -2.5' }, textForObject));
       const frame = createFrame(free);
       frame.map(box => (marker.appendChild(box)));
       marker.appendChild(text);
@@ -48,7 +48,9 @@ export default class Roomplan {
   }
 
   getText({ free, duration }) {
-    const freeText = free ? `FREE:\n ${duration.humanizedDuration}` : 'NOT FREE: \n';
+    const freeText = free
+                      ? `FREE:\n ${duration.humanizedDuration}`
+                      : `NOT FREE:\n ${duration.humanizedDuration}`;
     const color = free ? '#30E8BF' : '#c0392b';
     return { text: freeText, color };
   }
