@@ -14,31 +14,30 @@ export function createMarker(value) {
   return marker;
 }
 
-export function createText({ free, text, duration }) {
-  const freeText = free ? `free ${duration.humanizedDuration}` : 'not free';
-  // const textValue = free ? freeText : text;
+export function createText({ text, color, position }) {
   const textObject = document.createElement('a-text');
   setAttributes(textObject, {
-    value: freeText,
+    value: text,
     position: '-0.5 0 -1',
     rotation: '-90 0 0',
-    color: free ? '#7BC8A4' : '#f60',
+    color,
   });
   return textObject;
 }
 
-export function createBox({ position, depth, width, height, color }) {
+export function createBox({ position, depth, width, height, color, opacity }) {
   const box = document.createElement('a-box');
-  setAttributes(box, { position, depth, width, height, color });
+  setAttributes(box, { position, depth, width, height, color, opacity });
   return box;
 }
 
 export function createFrame(isFree) {
   const boxes = [];
-  boxes.push(createBox({ position: '-0.5 0 0', depth: '1.2', width: '0.1', height: '0.1', color: isFree ? '#7BC8A4' : '#f60' }));
-  boxes.push(createBox({ position: '0.5 0 0', depth: '1.2', width: '0.1', height: '0.1', color: isFree ? '#7BC8A4' : '#f60' }));
-  boxes.push(createBox({ position: '0 0 0.5', depth: '0.1', width: '1.2', height: '0.1', color: isFree ? '#7BC8A4' : '#f60' }));
-  boxes.push(createBox({ position: '0 0 -0.5', depth: '0.1', width: '1.2', height: '0.1', color: isFree ? '#7BC8A4' : '#f60' }));
+  const color = isFree ? 'green' : '#f60';
+  boxes.push(createBox({ position: '-0.8 0 -1.5', depth: '6', width: '0.3', height: '0.3', color }));
+  boxes.push(createBox({ position: '1.5 0 0.8', depth: '0.3', width: '6', height: '0.3', color }));
+  boxes.push(createBox({ position: '4 0 -1.5', depth: '6', width: '0.3', height: '0.3', color }));
+  boxes.push(createBox({ position: '1.5 0 -4', depth: '0.3', width: '6', height: '0.3', color }));
   return boxes;
 }
 
