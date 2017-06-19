@@ -4,7 +4,6 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background: tomato;
   color: #FFF;
   z-index: 100;
   display: flex;
@@ -14,10 +13,39 @@
   flex-direction: column;
 
   &.overlay-rotate-device {
+    background: tomato;
+    z-index: 101;
+
     svg {
       width: 200px;
       height: auto;
       margin-bottom: 30px;
     }
   }
+
+  &.overlay-loading {
+    background: #1D9EE0;
+    z-index: 102;
+
+    .spinner {
+      display: inline-block;
+      width: 50px;
+      height: 50px;
+      border: 3px solid rgba(255, 255, 255, .3);
+      border-radius: 50%;
+      border-top-color: #fff;
+      animation: spin 1s ease-in-out infinite;
+      opacity: 1;
+      transition: opacity .3s;
+
+      &.hidden {
+        opacity: 0;
+        visibility: hidden;
+      }
+    }
+  }
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
 }
