@@ -28,12 +28,17 @@ export default class Roomplan {
     Object.keys(markers).forEach((key) => {
       const marker = createMarker(key);
 
+      // logic for each room
       const { free, duration } = calculateAvailability(markers[key]);
-      const text = createText(this.getText({ free, duration }));
+      const textForObject = this.getText({ free, duration });
+
+      // a frame objects
+      const text = createText(Object.assign({ position: '-4 0 -2.5' }, textForObject));
       const frame = createFrame(free);
       frame.map(box => (marker.appendChild(box)));
       marker.appendChild(text);
 
+      // append to scene and save markers to edit on refresh
       this.scene.appendChild(marker);
       this.markers.push(marker);
     });
@@ -43,8 +48,11 @@ export default class Roomplan {
   }
 
   getText({ free, duration }) {
-    const freeText = free ? `free ${duration.humanizedDuration}` : 'not free';
-    return freeText;
+    const freeText = free
+                      ? `FREE:\n ${duration.humanizedDuration}`
+                      : `NOT FREE:\n ${duration.humanizedDuration}`;
+    const color = free ? '#30E8BF' : '#c0392b';
+    return { text: freeText, color };
   }
 
   stopRefresh() {
@@ -57,11 +65,12 @@ export default class Roomplan {
         const text = marker.querySelector('a-text');
         const key = marker.getAttribute('value');
         const { free, duration } = calculateAvailability(this.markerActivities[key]);
-
-        text.setAttribute('value', this.getText({ free, duration })); // TODO: fix this to set text correctly
+        const newText = this.getText({ free, duration });
+        text.setAttribute('value', newText.text); // TODO: fix this to set text correctly
+        text.setAttribute('color', newText.color); // TODO: fix this to set text correctly
       });
-    // }, 60000);
-    }, 2000);
+    }, 30000);
+    // }, 2000);
   }
 
 }

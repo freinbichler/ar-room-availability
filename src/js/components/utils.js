@@ -14,12 +14,15 @@ export function createMarker(value) {
   return marker;
 }
 
-export function createText({ text, color, position }) {
+export function createText({ text, color = '#000', position = '-2 0 -3' }) {
   const textObject = document.createElement('a-text');
   setAttributes(textObject, {
     value: text,
-    position: '-0.5 0 -1',
+    width: 4,
+    font: 'aileronsemibold',
+    'wrap-count': 20,
     rotation: '-90 0 0',
+    position,
     color,
   });
   return textObject;
@@ -33,11 +36,11 @@ export function createBox({ position, depth, width, height, color, opacity }) {
 
 export function createFrame(isFree) {
   const boxes = [];
-  const color = isFree ? 'green' : '#f60';
-  boxes.push(createBox({ position: '-0.8 0 -1.5', depth: '6', width: '0.3', height: '0.3', color }));
-  boxes.push(createBox({ position: '1.5 0 0.8', depth: '0.3', width: '6', height: '0.3', color }));
-  boxes.push(createBox({ position: '4 0 -1.5', depth: '6', width: '0.3', height: '0.3', color }));
-  boxes.push(createBox({ position: '1.5 0 -4', depth: '0.3', width: '6', height: '0.3', color }));
+  const color = isFree ? '#30E8BF' : '#c0392b';
+  boxes.push(createBox({ position: '-0.8 0 -1.05', depth: '4', width: '0.3', height: '0.3', color }));
+  boxes.push(createBox({ position: '1.05 0 0.8', depth: '0.3', width: '4', height: '0.3', color }));
+  boxes.push(createBox({ position: '2.9 0 -1.05', depth: '4', width: '0.3', height: '0.3', color }));
+  boxes.push(createBox({ position: '1.05 0 -2.9', depth: '0.3', width: '4', height: '0.3', color }));
   return boxes;
 }
 
@@ -52,7 +55,7 @@ export function calculateAvailabilityDuration(free, roomActivities, index) {
     // if room is currently free, calculate time until next activity
     if (roomActivities.length > 0) {
       // time to next activity
-      for (let activity of roomActivities) {
+      for (const activity of roomActivities) {
         if (now.isBefore(activity.begin)) {
           duration = window.moment.range(
             now,
@@ -104,8 +107,8 @@ export function calculateAvailability(roomActivities) {
   let index = -1;
   // const roomActivities = [
   //   { begin: '2017-06-19 15:00:00', end: '2017-06-19 15:30:00' },
-  //   { begin: '2017-06-19 16:00:00', end: '2017-06-19 16:30:00' },
-  //   { begin: '2017-06-19 17:00:00', end: '2017-06-19 17:30:00' },
+  //   { begin: '2017-06-19 16:00:00', end: '2017-06-19 16:50:00' },
+  //   { begin: '2017-06-19 17:05:00', end: '2017-06-19 17:30:00' },
   //   { begin: '2017-06-19 18:00:00', end: '2017-06-19 18:30:00' },
   // ];
   roomActivities.map((activity, i) => {
