@@ -4,6 +4,7 @@ import {
   createText,
   createFrame,
   createBox,
+  createBadge,
   calculateAvailability,
   loadJSON,
 } from './utils';
@@ -16,27 +17,41 @@ export default class Roomplan {
     // load the marker from the server
     const response = loadJSON('https://freinbichler.me/apps/ar-room-backend/');
     response.then((m) => {
-      this.markerActivities = m;
+      this.markerData = m;
       this.init();
     });
   }
 
   init() {
-    const markers = this.markerActivities;
-    console.log(markers);
+    const markers = this.markerData;
+    // console.log(markers);
 
     Object.keys(markers).forEach((key) => {
+      let counter = -2;
       const marker = createMarker(key);
 
       // logic for each room
-      const { free, duration } = calculateAvailability(markers[key]);
-      const textForObject = this.getText({ free, duration });
+      const { free, duration } = calculateAvailability(markers[key].activities);
+      const textObjects = this.getTextObjects({ free, duration, marker: key });
 
       // a frame objects
-      const text = createText(Object.assign({ position: '-4 0 -2.5' }, textForObject));
       const frame = createFrame(free);
+      const textBg = createBox({ position: '0 0 0', depth: '1.15', width: '1.15', height: '0.1', color: '#fff' });
+      marker.appendChild(textBg);
       frame.map(box => (marker.appendChild(box)));
-      marker.appendChild(text);
+      textObjects.map(obj => (marker.appendChild(obj)));
+
+      // if there are marker activites
+      markers[key].activities.map((activity) => {
+        const now = window.moment();
+        const toShow = !!(now.isBetween(activity.begin, activity.end) || now.isBefore(activity.begin));
+        // if activity is currently taking place or later in the day
+        if (toShow) {
+          const activityObj = this.getActivityObject({ activity, y: counter });
+          activityObj.map(a => (marker.appendChild(a)));
+          counter += 1.5;
+        }
+      });
 
       // append to scene and save markers to edit on refresh
       this.scene.appendChild(marker);
@@ -47,12 +62,33 @@ export default class Roomplan {
     this.refresh();
   }
 
-  getText({ free, duration }) {
-    const freeText = free
-                      ? `FREE:\n ${duration.humanizedDuration}`
-                      : `NOT FREE:\n ${duration.humanizedDuration}`;
+  getTextObjects({ free, duration, marker }) {
+    const titleText = free ? 'FREE' : 'OCCUPIED';
+    const durationText = duration.humanizedDuration;
     const color = free ? '#30E8BF' : '#c0392b';
-    return { text: freeText, color };
+    const titleEl = createText({ position: '1 0.25 1.3', text: titleText, color: '#fff' });
+    const durationEl = createText({ position: '1 0.25 1.7', text: durationText, color: '#fff', size: 3 });
+    const roomEl = createText({ position: '0 0.15 0', text: this.markerData[marker].room, color: '#000', size: 2 });
+    return [titleEl, durationEl, roomEl];
+  }
+
+  getActivityObject({ activity, y }) {
+    let badgeEl;
+    const timeStart = window.moment(activity.begin).format('HH:mm');
+    const timeEnd = window.moment(activity.end).format('HH:mm');
+    const faculty = activity.faculty.substring(0, 3);
+
+    // create  a frame elements
+    const bg = createBox({ position: `-3 0 ${y}`, depth: '1.2', width: '3', height: '0.1', color: '#fff' });
+    const titleEl = createText({ position: `-3.5 0.25 ${y - 0.3}`, text: activity.name, color: '#000', align: 'left', size: 1.5 });
+    const lecturerEl = createText({ position: `-3.5 0.25 ${y}`, text: activity.lecturer, color: '#000', align: 'left', size: 1.5 });
+    const timeEl = createText({ position: `-3.5 0.25 ${y + 0.3}`, text: `${timeStart} - ${timeEnd}`, color: '#000', size: 1.5, align: 'left' });
+    if (faculty.indexOf('MMA') !== -1 || faculty.indexOf('MMT') !== -1) {
+      badgeEl = createBadge({ position: `-3.9 0.25 ${y}`, src: `#${faculty.toLowerCase()}` });
+    } else {
+      badgeEl = createText({ position: `-3.9 0.25 ${y}`, text: faculty, color: '#000', size: 5 });
+    }
+    return [titleEl, timeEl, badgeEl, lecturerEl, bg];
   }
 
   stopRefresh() {
@@ -62,15 +98,21 @@ export default class Roomplan {
   refresh() {
     this.timer = setInterval(() => {
       this.markers.map((marker) => {
-        const text = marker.querySelector('a-text');
+        const text = marker.querySelectorAll('a-text');
+        const boxes = marker.querySelectorAll('a-box');
         const key = marker.getAttribute('value');
-        const { free, duration } = calculateAvailability(this.markerActivities[key]);
-        const newText = this.getText({ free, duration });
-        text.setAttribute('value', newText.text); // TODO: fix this to set text correctly
-        text.setAttribute('color', newText.color); // TODO: fix this to set text correctly
+        const { free, duration } = calculateAvailability(this.markerData[key].activities);
+        const color = free ? '#30E8BF' : '#c0392b';
+        const newObjs = this.getTextObjects({ free, duration, marker: key });
+        [...text].map((textObj, i) => {
+          textObj.setAttribute('value', newObjs[i].getAttribute('value'));
+          textObj.setAttribute('color', color);
+        });
+        [...boxes].map((box) => {
+          box.setAttribute('color', color);
+        });
       });
     }, 30000);
-    // }, 2000);
   }
 
 }

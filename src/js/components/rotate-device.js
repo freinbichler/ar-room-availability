@@ -2,10 +2,10 @@ export default class RotateDevice {
   constructor() {
     this.overlay = document.querySelector('.overlay-rotate-device');
 
-    this.addEventListener().bind(this);
+    this.listen();
   }
 
-  addEventListener() {
+  listen() {
     window.addEventListener('resize', () => {
       if (window.innerWidth > window.innerHeight) {
         this.overlay.style.display = 'none';
