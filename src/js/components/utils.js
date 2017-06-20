@@ -5,7 +5,7 @@ import humanizeDuration from 'humanize-duration';
 window.moment = extendMoment(Moment);
 
 export function setAttributes(el, attrs) {
-  for(let key in attrs) {
+  for (const key in attrs) {
     el.setAttribute(key, attrs[key]);
   }
 }
@@ -49,7 +49,7 @@ export function createBadge({ position, src }) {
 
 export function createFrame(isFree) {
   const boxes = [];
-  const color = isFree ? '#30E8BF' : '#c0392b';
+  const color = isFree ? '#00AA55' : 'tomato';
   boxes.push(createBox({ position: '-0.8 0 -1.05', depth: '4', width: '0.3', height: '0.3111', color, id: 'frame' }));
   boxes.push(createBox({ position: '1.05 0 1.4', depth: '1.5', width: '4', height: '0.3112', color, id: 'frame' }));
   boxes.push(createBox({ position: '2.9 0 -1.05', depth: '4', width: '0.3', height: '0.3111', color, id: 'frame' }));

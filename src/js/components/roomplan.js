@@ -104,7 +104,7 @@ export default class Roomplan {
         const boxes = marker.querySelectorAll('#frame');
         const key = marker.getAttribute('value');
         const { free, duration } = calculateAvailability(this.markerData[key].activities);
-        const color = free ? '#30E8BF' : '#c0392b';
+        const color = free ? '#00AA55' : 'tomato';
         const newObjs = this.getTextObjects({ free, duration, marker: key });
 
         // refresh title & duration value
