@@ -14,7 +14,7 @@ export default class Roomplan {
     this.markers = [];
 
     // load the marker from the server
-    const response = loadJSON('https://rooms.freinbichler.me/backend/');
+    const response = loadJSON('/backend/');
     response.then((m) => {
       const loadingScreen = document.querySelector('.overlay-loading');
       loadingScreen.classList.add('hidden');
