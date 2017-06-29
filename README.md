@@ -1,4 +1,12 @@
-# Boilerplate for ES6 & SASS Web Apps
+# AR Room Availability
+> A web-based augmented reality application to visualize room availability
+
+## Demo
+See https://twitter.com/fr3ino/status/880108156982108160
+
+## Technologies
+* AR.js: https://github.com/jeromeetienne/AR.js
+* A-Frame: https://aframe.io
 
 ## Structure
 All source files belong to the `src` folder. The page itself is served off the `public` folder.
@@ -7,7 +15,7 @@ Gulp tasks deploy your compiled and packed styles (one `styles.css`) and scripts
 
 ## Installation
 ```bash
-yarn install
+npm install
 ```
 
 After that execute `gulp serve`, point your browser to http://localhost:3000 and start adding and editing files in `src`.
@@ -19,4 +27,4 @@ After that execute `gulp serve`, point your browser to http://localhost:3000 and
 
 Add `--production` to any gulp task to activate production mode. In production mode all code will be minified and no sourcemaps are written.
 
-This boilerplate is based on https://github.com/pteich/h5web-es6-boilerplate
+This boilerplate is based on https://github.com/freinbichler/es6-sass-boilerplate
